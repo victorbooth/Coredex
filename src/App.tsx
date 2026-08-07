@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Dashboard from './components/layout/Dashboard'
+import AccountsPage from './components/accounts/AccountsPage'
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -36,9 +37,9 @@ export default function App() {
         </nav>
       </aside>
       <main className="flex-1 p-6">
-        {active === 'dashboard' ? (
-          <Dashboard />
-        ) : (
+        {active === 'dashboard' && <Dashboard />}
+        {active === 'accounts' && <AccountsPage />}
+        {!['dashboard', 'accounts'].includes(active) && (
           <>
             <h1 className="text-xl font-semibold capitalize">{active}</h1>
             <p className="mt-2 text-sm text-slate-500">This section is coming in a later batch.</p>
