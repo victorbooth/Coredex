@@ -1,5 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Canvas — Alice Blue family (light theme only) */
+  --color-alice-50: #f8fbff;
+  --color-alice-100: #f0f8ff;
+  --color-alice-200: #e3effb;
+  --color-alice-300: #d3e5f7;
+
+  /* Accent — moderate sapphire */
+  --color-sapphire-50: #f0f6ff;
+  --color-sapphire-100: #e0edff;
+  --color-sapphire-200: #c5daff;
+  --color-sapphire-300: #93b9fb;
+  --color-sapphire-400: #5f93f2;
+  --color-sapphire-500: #3a72e8;
+  --color-sapphire-600: #2558c7;
+  --color-sapphire-700: #1e46a2;
+  --color-sapphire-800: #1b3c84;
+  --color-sapphire-900: #18336b;
+
+  /* Text ink */
+  --color-ink-900: #12203a;
+  --color-ink-600: #48596f;
+  --color-ink-400: #8091a7;
+
+  /* Soft elevated card shadow */
+  --shadow-card: 0 1px 2px rgb(18 32 58 / 0.05), 0 12px 32px -16px rgb(18 32 58 / 0.12);
+}
 
 :root {
   color-scheme: light;
+}
+
+body {
+  @apply bg-alice-100 font-sans text-ink-900 antialiased;
 }
