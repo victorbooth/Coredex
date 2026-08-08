@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Modal from './Modal'
+import { Button, inputCls } from './kit'
 
 const DEMO_PIN = '1234'
 
@@ -24,15 +25,13 @@ export default function PinDialog({ open, onClose, onSuccess }: {
         value={pin}
         onChange={(e) => { setPin(e.target.value); setError(false) }}
         onKeyDown={(e) => e.key === 'Enter' && submit()}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2"
+        className={inputCls}
         placeholder="PIN"
         autoFocus
       />
-      {error && <p className="mt-2 text-sm text-red-600">Incorrect PIN</p>}
-      <p className="mt-2 text-xs text-slate-500">Demo PIN: 1234</p>
-      <button onClick={submit} className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white hover:bg-blue-700">
-        Reveal
-      </button>
+      {error && <p className="mt-2 text-sm text-rose-600">Incorrect PIN</p>}
+      <p className="mt-2 text-xs text-ink-400">Demo PIN: 1234</p>
+      <Button onClick={submit} className="mt-4 w-full">Reveal</Button>
     </Modal>
   )
 }
