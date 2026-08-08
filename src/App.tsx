@@ -6,6 +6,7 @@ import InvestmentsPage from './components/investments/InvestmentsPage'
 import EsppPage from './components/espp/EsppPage'
 import AssetsPage from './components/assets/AssetsPage'
 import GoalsPage from './components/goals/GoalsPage'
+import SettingsPage from './components/settings/SettingsPage'
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -49,18 +50,7 @@ export default function App() {
         {active === 'espp' && <EsppPage />}
         {active === 'assets' && <AssetsPage />}
         {active === 'goals' && <GoalsPage />}
-        {active !== 'settings' && !['dashboard', 'accounts', 'loans', 'investments', 'espp', 'assets', 'goals'].includes(active) && (
-          <>
-            <h1 className="text-xl font-semibold capitalize">{active}</h1>
-            <p className="mt-2 text-sm text-slate-500">This section is coming in a later batch.</p>
-          </>
-        )}
-        {active === 'settings' && (
-          <>
-            <h1 className="text-xl font-semibold">Settings</h1>
-            <p className="mt-2 text-sm text-slate-500">This section is coming in the next batch.</p>
-          </>
-        )}
+        {active === 'settings' && <SettingsPage />}
       </main>
     </div>
   )
