@@ -84,4 +84,71 @@ export default function EsppPage() {
             <tr>
               <th className="px-4 py-3">Purchase</th>
               <th className="px-4 py-3">Shares</th>
-              <th
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Net</th>
+              <th className="px-4 py-3">ROI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {db.esppPurchases.map((p) => (
+              <tr key={p.id} className="border-b border-slate-100 last:border-0">
+                <td className="px-4 py-3 text-slate-600">{p.purchaseDate}</td>
+                <td className="px-4 py-3 text-slate-600">{p.sharesPurchased.toFixed(2)}</td>
+                <td className="px-4 py-3 capitalize text-slate-600">{p.status}</td>
+                <td className="px-4 py-3 font-medium text-slate-800">{fmtMoney(p.netProceeds ?? 0)}</td>
+                <td className="px-4 py-3 text-emerald-600">{(p.estimatedRoi ?? 0).toFixed(1)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {loc && (
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <h2 className="mb-3 text-sm font-semibold text-slate-700">Line of Credit — {loc.nickname}</h2>
+          <div className="mb-3 grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
+            <div><span className="text-slate-500">Balance</span> <span className="font-semibold">{fmtMoney(loc.currentBalance)}</span></div>
+            <div><span className="text-slate-500">Limit</span> <span className="font-semibold">{fmtMoney(loc.creditLimit ?? 0)}</span></div>
+            <div><span className="text-slate-500">APR</span> <span className="font-semibold">{(loc.apr ?? 0).toFixed(2)}%</span></div>
+          </div>
+          <div className="space-y-1 text-sm">
+            {locDraws.map((d) => (
+              <div key={d.id} className="flex justify-between text-slate-600">
+                <span>Draw {d.locDrawDate}</span>
+                <span className="font-medium text-amber-700">{fmtMoney(d.locDrawAmount ?? 0)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <AddContributionModal open={showAdd} onClose={() => setShowAdd(false)} onAdd={addContribution} programs={db.esppPrograms.map((e) => ({ id: e.id, name: `${e.planName} (${personName(e.personId)})` }))} />
+    </div>
+  )
+}
+
+function AddContributionModal({ open, onClose, onAdd, programs }: {
+  open: boolean; onClose: () => void
+  onAdd: (c: { esppProgramId: string; amount: number; date: string; fundedByLoc: boolean }) => void
+  programs: { id: string; name: string }[]
+}) {
+  const [f, setF] = useState({ esppProgramId: programs[0]?.id ?? '', amount: 0, date: new Date().toISOString().slice(0, 10), fundedByLoc: false })
+  return (
+    <Modal open={open} onClose={onClose} title="Add ESPP Contribution">
+      <div className="space-y-3 text-sm">
+        <select className={inputCls} value={f.esppProgramId} onChange={(e) => setF({ ...f, esppProgramId: e.target.value })}>
+          {programs.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
+        <input className={inputCls} type="number" placeholder="Amount" value={f.amount} onChange={(e) => setF({ ...f, amount: Number(e.target.value) })} />
+        <input className={inputCls} type="date" value={f.date} onChange={(e) => setF({ ...f, date: e.target.value })} />
+        <label className="flex items-center gap-2 text-slate-700">
+          <input type="checkbox" checked={f.fundedByLoc} onChange={(e) => setF({ ...f, fundedByLoc: e.target.checked })} />
+          Funded by line of credit
+        </label>
+      </div>
+      <button onClick={() => onAdd(f)} className="mt-4 w-full rounded-lg bg-blue-600 py-2 text-white hover:bg-blue-700">
+        Add Contribution
+      </button>
+    </Modal>
+  )
+}
