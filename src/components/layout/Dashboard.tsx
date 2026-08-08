@@ -7,7 +7,7 @@ import { loadDb } from '../../data/dataProvider'
 import {
   computeTotals, computePredictedIncome, getDueSoon, fmtMoney, fmtMoney2,
 } from '../../utils/finance'
-import { Badge, Card, CHART, Progress, Stat } from '../ui/kit'
+import { Badge, Card, CHART, CHART_TOOLTIP, Progress, Stat } from '../ui/kit'
 
 export default function Dashboard() {
   const db = useMemo(() => loadDb(), [])
@@ -28,10 +28,10 @@ export default function Dashboard() {
       {dueSoon.length > 0 && (
         <div className="flex items-center gap-3 rounded-2xl bg-amber-50 px-5 py-4 text-sm text-amber-800 ring-1 ring-amber-200">
           <CalendarClock size={18} className="shrink-0 text-amber-600" />
-          <div>
-            <span className="font-semibold">Payments due soon: </span>
+          <p>
+            <span className="font-semibold">Payments due soon:</span>{' '}
             {dueSoon.map((d) => `${d.account.nickname} in ${d.days}d`).join(' · ')}
-          </div>
+          </p>
         </div>
       )}
 
@@ -42,7 +42,7 @@ export default function Dashboard() {
         <Stat
           label="Predicted Income"
           value={`${fmtMoney2(income.totalAnnual)}/yr`}
-          sub={`${fmtMoney2(income.hourly)} / work hour`}
+          sub={`${fmtMoney2(income.hourly)} passive hourly wage`}
         />
       </div>
 
@@ -57,7 +57,11 @@ export default function Dashboard() {
                   tickFormatter={(v) => `$${Math.round(Number(v) / 1000)}k`}
                   tick={CHART.tick} axisLine={false} tickLine={false} width={44}
                 />
-                <Tooltip formatter={(v) => fmtMoney(Number(v))} contentStyle={CHART.tooltip} cursor={{ fill: '#f0f6ff' }} />
+                <Tooltip
+                  formatter={(v) => fmtMoney(Number(v))}
+                  contentStyle={CHART_TOOLTIP}
+                  cursor={{ fill: '#f0f6ff' }}
+                />
                 <Bar dataKey="value" fill={CHART.primary} radius={[6, 6, 0, 0]} maxBarSize={48} />
               </BarChart>
             </ResponsiveContainer>
@@ -72,7 +76,7 @@ export default function Dashboard() {
                 return (
                   <div key={g.id}>
                     <div className="mb-1 flex justify-between text-xs text-ink-600">
-                      <span>{g.name}</span><span className="font-semibold text-ink-900">{pct}%</span>
+                      <span className="font-medium">{g.name}</span><span>{pct}%</span>
                     </div>
                     <Progress pct={pct} tone="emerald" />
                   </div>
